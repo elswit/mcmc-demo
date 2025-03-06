@@ -62,7 +62,7 @@ def plot_trace(chain):
 # Streamlit App Interface
 # ----------------------------
 st.title("Metropolis Hastings Sampling Demo")
-st.write("Model : $y(x) = m x + b + \sin{5 \pi m x} $")
+st.write("Model : $y(x) = m x + b + \sin{(5 \pi m x} ) + \epsilon $")
 
 # Sidebar inputs for data and sampling parameters
 st.sidebar.header("Data and Sampling Parameters")
@@ -116,8 +116,8 @@ if run_sampling:
     
     # After the loop finishes, display final model fit plot
     st.write("### Final Parameter Estimates")
-    st.write(f"Estimated m : {mhat:.3f}, True m {m:.3f} ")
-    st.write(f"Estimated b : {bhat:.3f}, True b : {b:.3f} ")
+    st.write(f"Estimated m : {mhat:.3f}, True m : 0.7 ")
+    st.write(f"Estimated b : {bhat:.3f}, True b : 0.2 ")
     # final_fig = plot_model_fit(x_data, y_data, true_model_func, (mhat, bhat))
     # st.pyplot(final_fig)
     
