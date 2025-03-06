@@ -62,17 +62,23 @@ def plot_trace(chain):
 # Streamlit App Interface
 # ----------------------------
 st.title("Metropolis Hastings Sampling Demo")
-st.write("Model : $y(x) = m x + b + \sin{(5 \pi m x} ) + \epsilon $")
+st.write("Model : $y(x) = m x + b + \\sin(5 \\pi m x) + \\epsilon$")
 
 # Sidebar inputs for data and sampling parameters
 st.sidebar.header("Data and Sampling Parameters")
 num_points = st.sidebar.slider("Number of Data Points", min_value=50, max_value=500, value=100, step=10)
 noise_std = st.sidebar.slider("Noise Std Dev", min_value=0.1, max_value=2.0, value=0.8, step=0.1)
-iterations = st.sidebar.slider("Number of Iterations", min_value=50, max_value=500, value=100, step=10)
+iterations = st.sidebar.slider("Number of Iterations", min_value=50, max_value=500, value=200, step=10)
 sigma = st.sidebar.slider("Sigma (Likelihood)", min_value=0.01, max_value=1.0, value=0.1, step=0.01)
 init_m = st.sidebar.number_input("Initial m (slope)", value=1.0, step=0.1)
 init_b = st.sidebar.number_input("Initial b (intercept)", value=1.0, step=0.1)
-run_sampling = st.sidebar.button("Run Sampling")
+
+# Use session state to run the simulation automatically on first load.
+if "simulation_run" not in st.session_state:
+    run_sampling = True
+    st.session_state.simulation_run = True
+else:
+    run_sampling = st.sidebar.button("Rerun Simulation")
 
 if run_sampling:
     # Generate data using the custom true model
@@ -108,18 +114,16 @@ if run_sampling:
         chain.append((mhat, bhat))
         
         # Update the live plot every 10 iterations
-        if i % 10 == 0:
+        if i % 5 == 0:
             fig = plot_model_fit(x_data, y_data, true_model_func, (mhat, bhat))
             plot_placeholder.pyplot(fig)
             progress_text.write(f"Iteration: {i}, Temperature: {T:.2f}")
             time.sleep(0.1)  # small delay for visualization
     
-    # After the loop finishes, display final model fit plot
+    # After the loop finishes, display final parameter estimates
     st.write("### Final Parameter Estimates")
-    st.write(f"Estimated m : {mhat:.3f}, True m : 0.7 ")
-    st.write(f"Estimated b : {bhat:.3f}, True b : 0.2 ")
-    # final_fig = plot_model_fit(x_data, y_data, true_model_func, (mhat, bhat))
-    # st.pyplot(final_fig)
+    st.write(f"Estimated m : {mhat:.3f}, True m : 0.7")
+    st.write(f"Estimated b : {bhat:.3f}, True b : 0.2")
     
     # Display the trace plot of the parameter samples
     st.subheader("Parameter Trace Plot")
