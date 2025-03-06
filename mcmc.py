@@ -114,11 +114,11 @@ if run_sampling:
         chain.append((mhat, bhat))
         
         # Update the live plot every 10 iterations
-        if i % 5 == 0:
+        if i % 10 == 0:
             fig = plot_model_fit(x_data, y_data, true_model_func, (mhat, bhat))
             plot_placeholder.pyplot(fig)
             progress_text.write(f"Iteration: {i}, Temperature: {T:.2f}")
-            time.sleep(0.1)  # small delay for visualization
+            time.sleep(0.05)  # small delay for visualization
     
     # After the loop finishes, display final parameter estimates
     st.write("### Final Parameter Estimates")
